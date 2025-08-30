@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ação contra a Mudança Global do Clima — Web App Educativo</title>
+  <style>
+    :root{
+      --bg:#f0fbff; --card:#ffffff; --accent:#2ec4b6; --accent-dark:#2aa89a; --warm:#ffb86b; --bad:#ff6b6b; --text:#183f3f;
+      --rounded:14px; --shadow: 0 6px 18px rgba(24,63,63,0.08);
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg, #e9fffb 0%, #f7fff8 100%);color:var(--text)}
+    .wrap{max-width:1100px;margin:22px auto;padding:18px;}
+    header{display:flex;gap:16px;align-items:center}
+    .logo{background:var(--card);padding:10px;border-radius:12px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px}
+    .logo h1{font-size:20px;margin:0}
+    nav{margin-left:auto;display:flex;gap:8px}
+    button.btn{background:var(--accent);border:0;color:white;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:600}
+    button.icon{background:transparent;border:2px solid transparent;padding:8px;border-radius:10px;cursor:pointer}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
+    .card{background:var(--card);padding:14px;border-radius:var(--rounded);box-shadow:var(--shadow)}
+    h2{margin:6px 0 12px 0}
+    p{line-height:1.45}
+    /* education area */
+    .edu-step{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:10px;background:linear-gradient(90deg,#ffffffaa,#f3fffb);}
+    .edu-step svg{width:72px;height:72px}
+    .controls{display:flex;gap:10px;align-items:center}
+    /* games area */
+    .tabs{display:flex;gap:6px;flex-wrap:wrap}
+    .tab{padding:8px 10px;border-radius:10px;background:transparent;border:2px solid transparent;cursor:pointer}
+    .tab.active{background:var(--accent);color:#fff}
+    .section{margin-top:12px}
+    /* quiz */
+    .question{font-size:18px;font-weight:600}
+    .answers{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .answer{padding:10px;border-radius:10px;border:2px solid #e6f6f4;background:#fff;cursor:pointer}
+    .answer[aria-pressed="true"]{outline:3px solid rgba(46,196,182,0.16)}
+    /* memory */
+    .memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    .card-geo{background:#e8fffb;border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;height:80px}
+    /* drag-drop */
+    .drag-area{display:flex;gap:12px;align-items:flex-start}
+    .item{padding:8px;border-radius:8px;background:linear-gradient(180deg,#fff,#f0fdfb);cursor:grab;border:2px dashed transparent}
+    .bin{flex:1;padding:12px;border-radius:8px;border:2px dashed #cfece6;min-height:120px}
+    /* daily challenges */
+    .challenge{display:flex;gap:10px;align-items:center;padding:8px;border-radius:8px}
+    /* badges */
+    .badges{display:flex;gap:8px;flex-wrap:wrap}
+    .badge{background:linear-gradient(180deg,#fff,#fff8ea);padding:8px 10px;border-radius:10px;border:2px solid #f0e2d2}
+    /* tips */
+    .tip{padding:10px;border-radius:8px;background:linear-gradient(180deg,#fff,#f7fff6)}
+    footer{margin-top:18px;text-align:center;color:#29514a}
+    /* responsive */
+    @media (max-width:980px){.grid{grid-template-columns:1fr;}.logo h1{font-size:18px}}
+    /* accessibility focus */
+    :focus{outline:3px solid rgba(46,196,182,0.2);outline-offset:2px}
+  </style>
+</head>
+<body>
+  <div class="wrap" role="application">
+    <header>
+      <div class="logo" aria-hidden="false">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="#2ec4b6"/>
+          <path d="M8 12c0-2.2 1.8-4 4-4v8c-2.2 0-4-1.8-4-4z" fill="#fff"/>
+        </svg>
+        <div>
+          <h1>Ação Contra a Mudança Climática</h1>
+          <div style="font-size:12px;color:#2a6b63">Lúdico • Acessível • Para todas as idades</div>
+        </div>
+      </div>
+      <nav>
+        <button id="audioToggle" class="btn" aria-pressed="false">Áudio: Desligado</button>
+        <button id="resetBtn" class="btn" style="background:var(--warm)">Resetar progresso</button>
+      </nav>
+    </header>
+
+    <div class="grid">
+      <main>
+        <section class="card" aria-labelledby="educ-title">
+          <h2 id="educ-title">Seção educativa</h2>
+          <div class="edu-step">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#ffb86b"/></svg>
+            <div>
+              <h3>O que é mudança climática?</h3>
+              <p>É a alteração duradoura dos padrões de clima da Terra. Pode acontecer por causas naturais, mas hoje grande parte é causada por ações humanas — como queimar combustíveis fósseis e desmatar — que liberam gases de efeito estufa.</p>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="edu-step">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3" fill="#2ec4b6"/></svg>
+            <div>
+              <h3>Causas</h3>
+              <p>Principais causas: uso excessivo de carros e fábricas que queimam combustíveis, desmatamento e desperdício de energia.</p>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="edu-step">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l3 8h8l-6 4 3 8-8-5-8 5 3-8-6-4h8z" fill="#2aa89a"/></svg>
+            <div>
+              <h3>Consequências</h3>
+              <p>Temperaturas extremas, furacões mais intensos, seca, derretimento de geleiras e impacto em plantas, animais e pessoas. Mas há muitas coisas que podemos fazer para ajudar.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="games-title" style="margin-top:12px">
+          <h2 id="games-title">Jogos interativos</h2>
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-tab="quiz" role="tab" aria-selected="true">Quiz</button>
+            <button class="tab" data-tab="memory" role="tab" aria-selected="false">Memória</button>
+            <button class="tab" data-tab="drag" role="tab" aria-selected="false">Separar Lixo</button>
+          </div>
+
+          <div id="gamesArea" class="section">
+            <!-- quiz -->
+            <div id="quiz" class="game-panel" role="tabpanel">
+              <div class="question" id="q-text">Pergunta será carregada...</div>
+              <div class="answers" id="answers"></div>
+              <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+                <button id="nextQ" class="btn">Próxima</button>
+                <div id="quizResult" style="margin-left:auto;font-weight:700"></div>
+              </div>
+            </div>
+
+            <!-- memory -->
+            <div id="memory" class="game-panel" role="tabpanel" style="display:none">
+              <div style="margin-bottom:8px;display:flex;gap:8px;align-items:center"><button id="memRestart" class="btn">Reiniciar</button><div id="memMsg"></div></div>
+              <div class="memory-grid" id="memGrid" aria-live="polite"></div>
+            </div>
+
+            <!-- drag -->
+            <div id="drag" class="game-panel" role="tabpanel" style="display:none">
+              <p>Arraste os itens para o local correto.</p>
+              <div class="drag-area">
+                <div style="flex:1">
+                  <div id="draggableList" style="display:grid;gap:8px"></div>
+                </div>
+                <div style="flex:1">
+                  <div class="bin" id="binRec" aria-dropeffect="move"><h4>Reciclável</h4></div>
+                </div>
+                <div style="flex:1">
+                  <div class="bin" id="binOrg"><h4>Orgânico</h4></div>
+                </div>
+              </div>
+              <div style="margin-top:8px;display:flex;gap:8px"><button id="dragCheck" class="btn">Verificar</button><div id="dragScore" style="margin-left:auto;font-weight:700"></div></div>
+            </div>
+
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="challenges-title" style="margin-top:12px">
+          <h2 id="challenges-title">Desafios diários</h2>
+          <div id="chList"></div>
+          <div style="margin-top:8px;display:flex;gap:8px;align-items:center"><button id="newChallenge" class="btn">Gerar desafio</button><button id="clearChallenges" class="btn" style="background:var(--bad)">Limpar</button></div>
+        </section>
+
+      </main>
+
+      <aside>
+        <div class="card" aria-labelledby="profile-title">
+          <h2 id="profile-title">Progresso & Medalhas</h2>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:72px;height:72px;border-radius:12px;background:linear-gradient(180deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:22px">🌱</div>
+            <div>
+              <div style="font-weight:700" id="scoreText">Pontos: 0</div>
+              <div id="levelText">Nível: Iniciante</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <h3 style="margin:6px 0">Medalhas</h3>
+            <div class="badges" id="badgesContainer"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px" aria-labelledby="tips-title">
+          <h2 id="tips-title">Dicas práticas</h2>
+          <div class="tip">Apague as luzes ao sair de um cômodo.</div>
+          <div style="height:8px"></div>
+          <div class="tip">Use sacolas reutilizáveis nas compras.</div>
+          <div style="height:8px"></div>
+          <div class="tip">Prefira transporte coletivo, bicicleta ou caminhadas curtas.</div>
+        </div>
+
+        <div class="card" style="margin-top:12px" aria-labelledby="access-title">
+          <h2 id="access-title">Acessibilidade</h2>
+          <div style="font-size:14px">Textos grandes. Botões espaçosos. Ative áudio para explicações faladas.</div>
+          <div style="height:8px"></div>
+          <button id="increaseFont" class="btn">Aumentar fonte</button><button id="decreaseFont" class="btn" style="background:var(--warm)">Diminuir fonte</button>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <small>Este app é educativo. Repasse as ações para amigos e família — todo mundo pode agir!</small>
+    </footer>
+  </div>
+
+  <script>
+    // ---------- state ----------
+    const state = {
+      score: parseInt(localStorage.getItem('clima_score')||'0'),
+      badges: JSON.parse(localStorage.getItem('clima_badges')||'[]'),
+      audio: (localStorage.getItem('clima_audio')==='true'),
+      fontSize: parseInt(localStorage.getItem('clima_font')||'16'),
+      daily: JSON.parse(localStorage.getItem('clima_daily')||'[]')
+    }
+
+    // ---------- accessibility font ----------
+    function applyFont(){document.documentElement.style.fontSize = state.fontSize+'px';}
+    applyFont();
+
+    document.getElementById('increaseFont').addEventListener('click',()=>{state.fontSize = Math.min(22, state.fontSize+1);applyFont();localStorage.setItem('clima_font',state.fontSize)});
+    document.getElementById('decreaseFont').addEventListener('click',()=>{state.fontSize = Math.max(12, state.fontSize-1);applyFont();localStorage.setItem('clima_font',state.fontSize)});
+
+    // ---------- audio toggle (Web Speech) ----------
+    const audioBtn = document.getElementById('audioToggle');
+    function updateAudioBtn(){audioBtn.innerText = 'Áudio: ' + (state.audio? 'Ligado' : 'Desligado'); audioBtn.setAttribute('aria-pressed', state.audio)}
+    updateAudioBtn();
+    audioBtn.addEventListener('click', ()=>{state.audio=!state.audio;localStorage.setItem('clima_audio',state.audio);updateAudioBtn()});
+
+    function speak(text){if(!state.audio) return; if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(text);u.lang='pt-BR';speechSynthesis.cancel();speechSynthesis.speak(u);} }
+
+    // ---------- score & badges ----------
+    const scoreText = document.getElementById('scoreText'); const levelText=document.getElementById('levelText'); const badgesContainer=document.getElementById('badgesContainer');
+    function saveProgress(){localStorage.setItem('clima_score',state.score);localStorage.setItem('clima_badges',JSON.stringify(state.badges));}
+    function updateProgress(){scoreText.innerText = 'Pontos: '+state.score; let level='Iniciante'; if(state.score>=200) level='Herói do Clima'; else if(state.score>=100) level='Protetor'; else if(state.score>=50) level='Apoiador'; levelText.innerText='Nível: '+level; badgesContainer.innerHTML = ''; state.badges.forEach(b=>{const d=document.createElement('div');d.className='badge';d.innerText=b;badgesContainer.appendChild(d)});}
+    updateProgress();
+
+    function awardBadge(name){if(!state.badges.includes(name)){state.badges.push(name);speak('Conquista: '+name);saveProgress();updateProgress();}}
+
+    // ---------- reset ----------
+    document.getElementById('resetBtn').addEventListener('click', ()=>{if(confirm('Deseja resetar o progresso?')){localStorage.clear();location.reload()}});
+
+    // ---------- tabs ----------
+    document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',(e)=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); e.target.classList.add('active'); const tab=e.target.dataset.tab; document.querySelectorAll('.game-panel').forEach(p=>p.style.display='none'); document.getElementById(tab).style.display='block'; speak('Abrindo jogo '+tab)}));
+
+    // ---------- QUIZ ----------
+    const quizData = [
+      {q:'Qual é um gás que contribui para o aquecimento global?', a:['Oxigênio','Dióxido de carbono','Nitrogênio'], correct:1},
+      {q:'Qual ação ajuda a reduzir emissões?', a:['Andar de bicicleta','Ligar todos os aparelhos ao mesmo tempo','Desmatar'], correct:0},
+      {q:'O que é reciclagem?', a:['Transformar lixo em coisa nova','Queimar lixo','Enterrar lixo'], correct:0},
+      {q:'Plantar árvores ajuda porque...', a:['Aumenta temperatura','Absorve CO2','Produz CO2'], correct:1},
+    ];
+    let qIndex = parseInt(localStorage.getItem('clima_qindex')||'0');
+    const qText = document.getElementById('q-text'); const answersBox = document.getElementById('answers'); const quizRes=document.getElementById('quizResult');
+    function loadQuestion(){const Q = quizData[qIndex % quizData.length]; qText.innerText = Q.q; answersBox.innerHTML=''; Q.a.forEach((ans,i)=>{const b=document.createElement('button');b.className='answer';b.innerText=ans; b.setAttribute('role','button'); b.addEventListener('click',()=>{if(i===Q.correct){quizRes.innerText='Correto! +10 pontos'; state.score+=10; saveProgress(); updateProgress(); speak('Resposta correta'); awardBadgeCheck(); } else {quizRes.innerText='Errado. Tente outra vez.'; speak('Resposta incorreta');} localStorage.setItem('clima_qindex',++qIndex); setTimeout(()=>{quizRes.innerText=''; loadQuestion()},900);});answersBox.appendChild(b)})}
+    document.getElementById('nextQ').addEventListener('click',()=>{qIndex++; localStorage.setItem('clima_qindex',qIndex); loadQuestion()});
+    loadQuestion();
+
+    // ---------- MEMORY GAME ----------
+    const icons = ['🌳','♻️','🔋','🌞','💧','🚲','🪴','🐝'];
+    let memCards=[]; let memMatched=0; let memFirst=null; let memLock=false;
+    function initMemory(){memCards = icons.concat(icons).map((v,i)=>({id:i,icon:v,flipped:false,matched:false})); shuffle(memCards); memMatched=0; memFirst=null; memLock=false; renderMem();}
+    function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}} 
+    function renderMem(){const g=document.getElementById('memGrid'); g.innerHTML=''; memCards.forEach((c,idx)=>{const el=document.createElement('div');el.className='card-geo';el.tabIndex=0;el.setAttribute('role','button');el.innerText = c.flipped || c.matched ? c.icon : '❓'; el.addEventListener('click',()=>flipCard(idx)); el.addEventListener('keydown',e=>{if(e.key==='Enter') flipCard(idx)}); g.appendChild(el)}); document.getElementById('memMsg').innerText = `Encontrados ${memMatched}/${icons.length}`;}
+    function flipCard(i){if(memLock || memCards[i].flipped || memCards[i].matched) return; memCards[i].flipped=true; renderMem(); if(memFirst===null){memFirst=i; return;} const a=memFirst, b=i; if(memCards[a].icon===memCards[b].icon){memCards[a].matched=memCards[b].matched=true; memMatched++; state.score+=5; saveProgress(); updateProgress(); speak('Parabéns! Par combinada'); memFirst=null; awardBadgeCheck(); renderMem(); if(memMatched===icons.length){speak('Você venceu o jogo da memória!'); awardBadge('Mestre da Memória')} } else {memLock=true; setTimeout(()=>{memCards[a].flipped=memCards[b].flipped=false; memLock=false; memFirst=null; renderMem()},900);} }
+    document.getElementById('memRestart').addEventListener('click',initMemory); initMemory();
+
+    // ---------- DRAG & DROP ----------
+    const items = [ {text:'Garrafa de vidro',type:'rec'}, {text:'Casca de banana',type:'org'}, {text:'Lata',type:'rec'}, {text:'Restos de comida',type:'org'}, {text:'Papel',type:'rec'} ];
+    function renderDraggables(){const list=document.getElementById('draggableList'); list.innerHTML=''; shuffle(items); items.forEach((it,idx)=>{const d=document.createElement('div');d.className='item';d.draggable=true; d.innerText=it.text; d.dataset.type=it.type; d.id='d-'+idx; d.addEventListener('dragstart', (e)=>{e.dataTransfer.setData('text/plain', d.id); setTimeout(()=>d.style.opacity='0.5',20)}); d.addEventListener('dragend', ()=>{d.style.opacity='1'}); list.appendChild(d)})}
+    const binRec = document.getElementById('binRec'); const binOrg = document.getElementById('binOrg'); [binRec,binOrg].forEach(bin=>{bin.addEventListener('dragover',(e)=>{e.preventDefault(); bin.style.borderColor='var(--accent-dark)'}); bin.addEventListener('dragleave',()=>{bin.style.borderColor='#cfece6'}); bin.addEventListener('drop',(e)=>{e.preventDefault(); bin.style.borderColor='#cfece6'; const id=e.dataTransfer.getData('text/plain'); const el=document.getElementById(id); if(!el) return; bin.appendChild(el); el.style.margin='6px 0';})});
+    document.getElementById('dragCheck').addEventListener('click', ()=>{let correct=0; document.querySelectorAll('#binRec .item').forEach(it=>{ if(it.dataset.type==='rec') correct++}); document.querySelectorAll('#binOrg .item').forEach(it=>{ if(it.dataset.type==='org') correct++}); const total = items.length; document.getElementById('dragScore').innerText = `${correct}/${total} corretos`; state.score += correct*3; saveProgress(); updateProgress(); if(correct===total) {speak('Excelente! Separação correta'); awardBadge('Separador Expert')} });
+    renderDraggables();
+
+    // ---------- Challenges ----------
+    const defaultChallenges = ['Economizar água por 20 minutos','Plantar uma muda ou semente','Evitar usar carro hoje','Desligar luzes desnecessárias'];
+    function renderChallenges(){const list=document.getElementById('chList'); list.innerHTML=''; state.daily.forEach((c,idx)=>{const el=document.createElement('div');el.className='challenge'; const cb=document.createElement('input');cb.type='checkbox'; cb.checked = c.done; cb.addEventListener('change',()=>{c.done=cb.checked; localStorage.setItem('clima_daily',JSON.stringify(state.daily)); if(c.done){state.score+=7; saveProgress(); updateProgress(); awardBadgeCheck(); speak('Desafio completo: '+c.title)} }); const span=document.createElement('div'); span.innerText=c.title; el.appendChild(cb); el.appendChild(span); const date=document.createElement('div'); date.style.marginLeft='auto'; date.style.fontSize='12px'; date.style.opacity='0.7'; date.innerText = new Date(c.created).toLocaleDateString(); el.appendChild(date); list.appendChild(el)});
+    }
+    if(state.daily.length===0){state.daily = defaultChallenges.slice(0,2).map(t=>({title:t,done:false,created:Date.now()})); localStorage.setItem('clima_daily',JSON.stringify(state.daily));}
+    renderChallenges();
+    document.getElementById('newChallenge').addEventListener('click',()=>{const pick = defaultChallenges[Math.floor(Math.random()*defaultChallenges.length)]; state.daily.push({title:pick,done:false,created:Date.now()}); localStorage.setItem('clima_daily',JSON.stringify(state.daily)); renderChallenges(); speak('Novo desafio gerado')});
+    document.getElementById('clearChallenges').addEventListener('click',()=>{if(confirm('Remover todos os desafios?')){state.daily=[]; localStorage.setItem('clima_daily',JSON.stringify(state.daily)); renderChallenges()}});
+
+    // ---------- badges thresholds ----------
+    function awardBadgeCheck(){ if(state.score>=50) awardBadge('50 Pontos'); if(state.score>=100) awardBadge('100 Pontos'); if(state.score>=200) awardBadge('200 Pontos'); }
+    awardBadgeCheck();
+
+    // ---------- utilities ----------
+    document.getElementById('memGrid').addEventListener('keydown', ()=>{});
+
+    // Generate simple tooltip-like guidance for first-time users
+    if(!localStorage.getItem('clima_seen_intro')){
+      speak('Bem-vindo! Explore a seção educativa e divirta-se com os jogos. Ative o áudio se desejar ouvir as explicações.');
+      localStorage.setItem('clima_seen_intro','1');
+    }
+
+    // small keyboard navigation help
+    document.addEventListener('keydown',(e)=>{
+      if(e.key==='?') alert('Atalhos: Tab para navegar. Enter para escolher. ? para ajuda.');
+    })
+
+  </script>
+</body>
+</html>
